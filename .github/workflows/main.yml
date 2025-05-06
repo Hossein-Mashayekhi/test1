@@ -1,7 +1,10 @@
 name: Hossein Mashayekhi
 
 on:
-  workflow_dispatch:  # Allows manual trigger from GitHub
+  workflow_dispatch:  # Trigger manually from GitHub UI
+
+permissions:
+  contents: write  # Allow GitHub Actions to push to repo
 
 jobs:
   send-request:
@@ -18,18 +21,18 @@ jobs:
 
           echo "Response: $response"
           
-          # Assuming the response is something like: {"token": "abc123"}
+          # Try to extract token from JSON (adjust if needed)
           token=$(echo "$response" | grep -oP '(?<="token":")[^"]+')
-
-          echo "Token: $token"
           
+          echo "Extracted token: $token"
           echo "$token" > token.txt
+          cat token.txt
 
       - name: Commit token to repo
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add token.txt
-          git commit -m "Add token from server response"
+          git commit -m "Add token from server response" || echo "Nothing to commit"
           git push
 
