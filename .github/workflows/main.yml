@@ -1,0 +1,15 @@
+name: Hossein Mashayekhi
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  send-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send data to URL
+        run: |
+          curl -X POST http://shams.sython.ir/test.php \
+          -d "name=Hossein-Mashayekhi&student_number=00131033907019"
